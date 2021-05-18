@@ -1,18 +1,19 @@
-using Ecomerce_WEB.Data;
+using Application.Interfaces;
+using Application.OpenApp;
+using Domain.Interfaces.Generics;
+using Domain.Interfaces.InterfaceProduct;
+using Domain.Interfaces.InterfaceServices;
+using Domain.Services;
 using Infrastruture.Configuration;
+using Infrastruture.Repository.Generics;
+using Infrastruture.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecomerce_WEB
 {
@@ -35,6 +36,24 @@ namespace Ecomerce_WEB
                 .AddEntityFrameworkStores<ContextBase>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+
+            ///INJEÇAÕ DAS DEPENDENCIAS 
+
+
+            // INTERFACE DE REPOSITORIO --- DOMinio
+
+            services.AddSingleton(typeof(IGeneric<>), typeof(RepositoryGenerics<>));
+
+            //Interface de PRODUCT
+            services.AddSingleton<IProduct, RepositoryProduct>();
+
+            //INTERFACE DA APLICAÇAO --- Aplication
+            services.AddSingleton<InterfaceProductApp, AppProduct>();
+
+
+            //SERVICO DOMINIO
+            services.AddSingleton<IServiceProduct, ServiceProduct>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
