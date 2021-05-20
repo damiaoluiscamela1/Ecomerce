@@ -8,41 +8,6 @@ namespace Infrastruture.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationUser",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    USR_CPF = table.Column<int>(maxLength: 50, nullable: false),
-                    USR_IDADE = table.Column<int>(nullable: false),
-                    USR_NOME = table.Column<string>(maxLength: 255, nullable: true),
-                    USR_CEP = table.Column<string>(maxLength: 15, nullable: true),
-                    USR_ENDERECO = table.Column<string>(maxLength: 255, nullable: true),
-                    USR_COMPLEMENTO_ENDERECO = table.Column<string>(maxLength: 450, nullable: true),
-                    USR_CELULAR = table.Column<string>(maxLength: 20, nullable: true),
-                    USR_TELEFONE = table.Column<string>(maxLength: 20, nullable: true),
-                    USR_ESTADO = table.Column<bool>(nullable: false),
-                    USR_TIPO = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -74,7 +39,17 @@ namespace Infrastruture.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    USR_CPF = table.Column<int>(maxLength: 50, nullable: false),
+                    USR_IDADE = table.Column<int>(nullable: false),
+                    USR_NOME = table.Column<string>(maxLength: 255, nullable: true),
+                    USR_CEP = table.Column<string>(maxLength: 15, nullable: true),
+                    USR_ENDERECO = table.Column<string>(maxLength: 255, nullable: true),
+                    USR_COMPLEMENTO_ENDERECO = table.Column<string>(maxLength: 450, nullable: true),
+                    USR_CELULAR = table.Column<string>(maxLength: 20, nullable: true),
+                    USR_TELEFONE = table.Column<string>(maxLength: 20, nullable: true),
+                    USR_ESTADO = table.Column<bool>(nullable: false),
+                    USR_TIPO = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -230,9 +205,9 @@ namespace Infrastruture.Migrations
                         principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TB_COMPRA_USUARIO_ApplicationUser_UserId",
+                        name: "FK_TB_COMPRA_USUARIO_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "ApplicationUser",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -311,13 +286,10 @@ namespace Infrastruture.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "PRODUTO");
 
             migrationBuilder.DropTable(
-                name: "ApplicationUser");
+                name: "AspNetUsers");
         }
     }
 }

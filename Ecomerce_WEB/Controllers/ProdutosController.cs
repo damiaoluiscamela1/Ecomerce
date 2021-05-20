@@ -1,10 +1,8 @@
 ﻿using Application.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,19 +11,25 @@ namespace Ecomerce_WEB.Controllers
     [Authorize]
     public class ProdutosController : Controller
     {
-        //EMPLEMENTAR OS METODOS QUE VEM Da InterfaceProductApp NA CAMADA DE APPLICATION
+        public readonly UserManager<ApplicationUser> _userManager;
+
+
+        //EMPLEMENTAR OS METODOS QUE VEM Da InterfaceProductApp NA CAMADA DE APPLICATION   
 
         public readonly InterfaceProductApp _InterfaceProductApp;
-        public ProdutosController(InterfaceProductApp InterfaceProductApp)
+        public ProdutosController(InterfaceProductApp InterfaceProductApp, UserManager<ApplicationUser> userManager)
         {
+            
             _InterfaceProductApp = InterfaceProductApp;
+            _userManager = userManager;
         }
 
         // GET: ProdutosController
         public async Task <ActionResult> Index()
         {
+            var idUsuario = await RetornarIdUsuarioLogado();
 
-            return View(await _InterfaceProductApp.List());
+            return View(await _InterfaceProductApp.ListarProdutosUsuarios(idUsuario));
         }
 
         // GET: ProdutosController/Details/5
@@ -47,6 +51,9 @@ namespace Ecomerce_WEB.Controllers
         {
             try
             {
+                var idUsuario = await RetornarIdUsuarioLogado();
+                produto.UserId = idUsuario;
+
                 await _InterfaceProductApp.AddProduct(produto);
                 if (produto.Notitycoes.Any()) 
                 {
@@ -55,13 +62,13 @@ namespace Ecomerce_WEB.Controllers
                         ModelState.AddModelError(item.NomePropriedade, item.mensagem);
                     }
 
-                    return View("edit", produto);
+                    return View("Create", produto);
                 }
                
             }
             catch
             {
-                return View("edit", produto);
+                return View("Create", produto);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -121,6 +128,12 @@ namespace Ecomerce_WEB.Controllers
             {
                 return View();
             }
+        }
+
+        private async Task<string> RetornarIdUsuarioLogado() 
+        {
+            var idUsuario = await _userManager.GetUserAsync(User);
+            return idUsuario.Id;
         }
     }
 }
